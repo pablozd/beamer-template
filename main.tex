@@ -1,0 +1,141 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  main.tex — demo del tema pablozd (beamer + metropolis)
+%%  Compilar: latexmk -pdf main.tex   (usa biber para la bibliografía)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[aspectratio=169,10pt]{beamer}
+
+\usetheme{pablozd}          % tema (opcional: [banner=otra-imagen.png])
+\usepackage{zd-paquetes}    % preámbulo de paquetes ordenado
+
+\title[MDO]{Marcación Diferencial de Objetos}
+\subtitle{Un template \themename para presentaciones de lingüística}
+\author[P. Zdrojewski]{Pablo D. Zdrojewski}
+\institute{Facultad de Filosofía y Letras · Universidad de Buenos Aires}
+\date{6 de julio de 2026}
+% Logos institucionales. El logo oficial de FILO:UBA se descarga una vez:
+%   wget -O logo-filo-uba.png https://www.filo.uba.ar/themes/contrib/fedro-theme/logo.png
+% (verificá que no sea la variante blanca para fondo oscuro; si lo es,
+%  usá la versión en color del kit de identidad de la Facultad).
+% Si el archivo existe se usa; si no, la demo cae en los logos de prueba.
+\IfFileExists{logo-filo-uba.png}{%
+  \titlegraphic{\zdlogo{logo-filo-uba.png}}%
+}{%
+  \titlegraphic{\zdlogo{logo-test1.png}\zdlogo{logo-test2.png}}%
+}
+
+\begin{document}
+
+% ---------- Portada con banner ----------
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% ---------- Índice ----------
+\begin{frame}{Contenidos}
+  \tableofcontents
+\end{frame}
+
+% =======================================================
+\section{Ejemplos glosados}
+% =======================================================
+
+\begin{frame}{Ejemplos con \texttt{langsci-gb4e} y \texttt{leipzig}}
+  El contraste básico de la MDO en español \citep{saab2021nonexistence}:
+  \begin{exe}
+    \ex\label{ex:mdo}
+    \begin{xlist}
+      \ex[]{
+        \gll Juan vio *(a) María.\\
+        Juan vio.\Third{}\Sg{} \Dom{} María\\
+        \glt `Juan vio a María.'
+      }
+      \ex[*]{
+        \gll Juan la\idx{i} vio a la casa\idx{i}.\\
+        Juan \Cl{}.\Acc{} vio \Dom{} la casa\\
+        \glt Duplicación de clíticos con objetos inanimados
+      }
+    \end{xlist}
+  \end{exe}
+  El ejemplo (\ref{ex:mdo}) muestra la interacción entre \alert{animacidad}
+  y \alert{especificidad}.
+\end{frame}
+
+% =======================================================
+\section{Árboles}
+% =======================================================
+
+\begin{frame}{Árboles con \texttt{forest}}
+  \centering
+  \begin{forest} arbolzd
+    [S
+      [SD [Juan]]
+      [Sv
+        [v\('\)
+          [v]
+          [SV
+            [V [vio]]
+            [SK
+              [K [a]]
+              [SD [María]]]]]]]
+  \end{forest}
+\end{frame}
+
+% =======================================================
+\section{Semántica formal}
+% =======================================================
+
+\begin{frame}{Bloques y notación semántica}
+  \begin{block}{Denotación}
+    $\llbracket \text{ver} \rrbracket^{g} =
+      \lambda x \lambda e\,.\,\mathrm{ver}(e) \wedge \mathrm{Tema}(e, x)$
+  \end{block}
+  \begin{exampleblock}{Generalización}
+    Todo objeto \([+\text{animado}, +\text{específico}]\) aparece marcado con \emph{a}.
+  \end{exampleblock}
+  \begin{alertblock}{Problema abierto}
+    ¿La MDO es un fenómeno de Caso o de estructura informativa?
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Tablas con \texttt{booktabs} y columnas}
+  \begin{multicols}{2}
+    \begin{table}
+      \centering
+      \begin{tabular}{lcc}
+        \toprule
+        Objeto & Animado & MDO \\
+        \midrule
+        María        & sí & obligatoria \\
+        el perro     & sí & variable \\
+        la casa      & no & ausente \\
+        \bottomrule
+      \end{tabular}
+    \end{table}
+    \columnbreak
+    \begin{itemize}
+      \item Nodo principal
+      \item Otro nodo
+        \begin{itemize}
+          \item Subnodo
+            \begin{itemize}
+              \item Sub-subnodo
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+  \end{multicols}
+\end{frame}
+
+% ---------- Standout ----------
+% [plain] oculta el pie de navegación en frames de cierre
+\begin{frame}[standout, plain]
+  ¿Preguntas?
+\end{frame}
+
+% ---------- Bibliografía ----------
+\appendix
+\nocite{*}
+\begin{frame}[allowframebreaks]{Referencias}
+  \printbibliography[heading=none]
+\end{frame}
+
+\end{document}

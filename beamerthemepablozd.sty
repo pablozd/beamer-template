@@ -1,0 +1,230 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  beamerthemepablozd.sty
+%%
+%%  Tema para beamer basado en METROPOLIS con la paleta de pablozd.ar
+%%  (azules del banner de red de nodos + fondo casi blanco).
+%%
+%%  Uso:
+%%      \documentclass[aspectratio=169]{beamer}
+%%      \usetheme{pablozd}                       % banner por defecto
+%%      \usetheme[banner=img/banner.png]{pablozd}% banner personalizado
+%%
+%%  Requiere: beamertheme-metropolis, tikz
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerthemepablozd}[2026/07/06 v1.0 Tema metropolis con paleta pablozd.ar]
+
+\RequirePackage{tikz}
+\usetikzlibrary{calc}
+
+%=======================================================================
+% OPCIONES DEL TEMA
+%=======================================================================
+% banner=<archivo>  : imagen de fondo para la portada (default: banner-nuevo.png)
+\newcommand{\zd@banner}{banner-nuevo.png}
+\DeclareOptionBeamer{banner}{\renewcommand{\zd@banner}{#1}}
+\ProcessOptionsBeamer
+
+%-----------------------------------------------------------------------
+% Base: metropolis
+%   progressbar=frametitle -> barra de progreso bajo el título de cada slide
+%   numbering=fraction     -> numeración n/total en el pie
+%   block=fill             -> bloques con fondo coloreado
+%-----------------------------------------------------------------------
+\usetheme[progressbar=frametitle,numbering=fraction,block=fill]{metropolis}
+
+%=======================================================================
+% PALETA pablozd.ar (extraída del banner de red sintáctica)
+%=======================================================================
+\definecolor{zdBg}{HTML}{F7FAFE}     % fondo casi blanco con tinte azul
+\definecolor{zdPale}{HTML}{D0E5FB}   % celeste pálido (ondas del banner)
+\definecolor{zdLight}{HTML}{8DC6FC}  % celeste claro (nodos secundarios)
+\definecolor{zdSky}{HTML}{3898F1}    % azul cielo (aristas destacadas)
+\definecolor{zdBlue}{HTML}{015CB4}   % azul principal (nodos oscuros)
+\definecolor{zdNavy}{HTML}{02386E}   % azul profundo (titulares)
+\definecolor{zdInk}{HTML}{15263B}    % tinta: texto principal
+\definecolor{zdGray}{HTML}{5A6B7D}   % gris azulado: metadatos, pies
+\definecolor{zdAlert}{HTML}{C25015}  % naranja quemado: contraste cálido
+
+% Alias para hyperref (compatibles con preámbulos previos)
+\providecolor{dark-red}{HTML}{8B1A1A}
+\providecolor{dark-blue}{HTML}{02386E}
+\providecolor{medium-blue}{HTML}{015CB4}
+
+%=======================================================================
+% ASIGNACIÓN DE COLORES BEAMER
+%=======================================================================
+\setbeamercolor{normal text}{fg=zdInk, bg=zdBg}
+\setbeamercolor{alerted text}{fg=zdAlert}
+\setbeamercolor{example text}{fg=zdBlue}
+
+% Título de cada frame: bloque azul con texto claro
+\setbeamercolor{frametitle}{fg=zdBg, bg=zdBlue}
+
+% Barras de progreso (frametitle, section page, pie)
+\setbeamercolor{progress bar}{fg=zdSky, bg=zdPale}
+\setbeamercolor{title separator}{fg=zdSky, bg=zdPale}
+\setbeamercolor{progress bar in head/foot}{fg=zdSky, bg=zdPale}
+\setbeamercolor{progress bar in section page}{fg=zdSky, bg=zdPale}
+
+% Frames "standout" ([standout]): fondo azul profundo
+\setbeamercolor{palette primary}{fg=zdBg, bg=zdNavy}
+
+% Portada y páginas de sección
+\setbeamercolor{title}{fg=zdNavy}
+\setbeamercolor{subtitle}{fg=zdGray}
+\setbeamercolor{section title}{fg=zdNavy}
+\setbeamercolor{author}{fg=zdInk}
+\setbeamercolor{institute}{fg=zdGray}
+\setbeamercolor{date}{fg=zdGray}
+
+% Bloques
+\setbeamercolor{block title}{fg=zdNavy, bg=zdPale}
+\setbeamercolor{block body}{fg=zdInk, bg=zdPale!35!zdBg}
+\setbeamercolor{block title alerted}{fg=white, bg=zdAlert}
+\setbeamercolor{block body alerted}{fg=zdInk, bg=zdAlert!12!zdBg}
+\setbeamercolor{block title example}{fg=zdBg, bg=zdSky}
+\setbeamercolor{block body example}{fg=zdInk, bg=zdSky!12!zdBg}
+
+% Pie de página y notas
+\setbeamercolor{footline}{fg=zdGray, bg=zdBg}
+\setbeamercolor{page number in head/foot}{fg=zdGray}
+\setbeamercolor{navigation symbols}{fg=zdLight}
+\setbeamercolor{navigation symbols dimmed}{fg=zdPale}
+
+%=======================================================================
+% FOOTLINE: autor · sección | navegación | n/total
+%=======================================================================
+% Usa los títulos cortos si están definidos:
+%     \title[corto]{...}  \author[corto]{...}
+% Los símbolos de navegación (slide/frame/sección/documento) son
+% clicables en el PDF. Se ocultan automáticamente en frames [plain]
+% (portada) y [standout].
+\makeatletter
+\newcommand{\zd@footsep}{\;\textcolor{zdSky}{·}\;}
+\setbeamertemplate{footline}{%
+  {\color{zdPale}\hrule width \paperwidth height .5pt}%
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.4ex,dp=1.3ex,%
+      leftskip=.04\paperwidth,rightskip=.04\paperwidth]{footline}%
+    \usebeamerfont{page number in head/foot}\scriptsize
+    \hypersetup{linkcolor=zdGray}% la sección es un hipervínculo: color del pie
+    \insertshortauthor
+    \ifx\insertsectionhead\@empty\else\zd@footsep\insertsectionhead\fi
+    \hfill
+    \insertslidenavigationsymbol
+    \insertframenavigationsymbol
+    \insertsectionnavigationsymbol
+    \insertdocnavigationsymbol
+    \qquad
+    \insertframenumber\,/\,\inserttotalframenumber
+  \end{beamercolorbox}}
+\makeatother
+
+% Bibliografía
+\setbeamercolor{bibliography entry author}{fg=zdNavy}
+\setbeamercolor{bibliography entry title}{fg=zdInk}
+\setbeamercolor{bibliography entry note}{fg=zdGray}
+\setbeamercolor{bibliography item}{fg=zdBlue}
+
+%=======================================================================
+% HYPERREF vs. ESTRUCTURA DEL TEMA
+%=======================================================================
+% Con colorlinks=true, los títulos de sección y las entradas del índice
+% son hipervínculos y heredarían linkcolor (rojo). Se fuerza el color
+% del tema en esos contextos.
+\AtBeginDocument{%
+  \addtobeamertemplate{section page}{\begingroup\hypersetup{linkcolor=zdNavy}}{\endgroup}%
+}
+\setbeamertemplate{section in toc}{%
+  \hypersetup{linkcolor=zdNavy}%
+  \leavevmode\tikz{\fill[zdBlue] (0,0) circle (2.1pt);}\hspace{.6em}%
+  \inserttocsection\par\vspace{.6em}}
+\setbeamertemplate{subsection in toc}{%
+  \hypersetup{linkcolor=zdInk}%
+  \leavevmode\hspace{1.4em}\tikz{\fill[zdSky] (0,0) circle (1.7pt);}\hspace{.6em}%
+  \inserttocsubsection\par\vspace{.4em}}
+
+%=======================================================================
+% MARCADORES DE LISTAS: "nodos" como en el banner
+%=======================================================================
+\setbeamertemplate{itemize item}{%
+  \tikz{\fill[zdBlue] (0,0) circle (2.1pt);}}
+\setbeamertemplate{itemize subitem}{%
+  \tikz{\fill[zdSky] (0,0) circle (1.7pt);}}
+\setbeamertemplate{itemize subsubitem}{%
+  \tikz{\fill[zdLight] (0,0) circle (1.4pt);}}
+\setbeamercolor{enumerate item}{fg=zdBlue}
+\setbeamercolor{enumerate subitem}{fg=zdSky}
+\setbeamercolor{caption name}{fg=zdBlue}
+
+%=======================================================================
+% PORTADA: banner de red como cabecera a sangre completa
+%=======================================================================
+% Logos institucionales (universidad, instituto, proyecto, financiamiento):
+% se declaran en el preámbulo con el mecanismo estándar de beamer:
+%     \titlegraphic{\zdlogo{logo-uba.png}\zdlogo{logo-iflh.pdf}}
+% y se ubican abajo a la derecha, alineados con el bloque de autor.
+% \zdlogo normaliza la altura (ajustable con \zdlogoheight) y separa
+% cada logo con \zdlogosep. El último \zdlogosep se descarta.
+\newlength{\zdlogoheight}\setlength{\zdlogoheight}{7.5mm}
+\newcommand{\zdlogosep}{\hspace{1.5em}}
+\newcommand{\zdlogo}[2][]{%
+  \includegraphics[height=\zdlogoheight,#1]{#2}\zdlogosep\ignorespaces}
+\makeatletter
+\setbeamertemplate{title page}{%
+  \begin{tikzpicture}[remember picture, overlay]
+    % lienzo
+    \fill[zdBg] (current page.south west) rectangle (current page.north east);
+    % banner a lo ancho de la página, anclado arriba (proporción 4:1)
+    \node[anchor=north, inner sep=0pt] at (current page.north)
+      {\includegraphics[width=\paperwidth]{\zd@banner}};
+    % bloque de título
+    \node[anchor=north west, inner sep=0pt, text width=.84\paperwidth]
+      at ($(current page.north west)+(.08\paperwidth,-.50\paperheight)$) {%
+        {\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par}%
+        \vspace{1.4ex}%
+        {\color{zdSky}\rule{.16\paperwidth}{1.6pt}\par}%
+        \ifx\insertsubtitle\@empty\else
+          \vspace{1.4ex}%
+          {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+        \fi
+      };
+    % autor / institución / fecha, abajo a la izquierda
+    \node[anchor=south west, inner sep=0pt, text width=.58\paperwidth]
+      at ($(current page.south west)+(.08\paperwidth,.06\paperheight)$) {%
+        {\usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor\par}%
+        \ifx\insertinstitute\@empty\else
+          \vspace{.4ex}%
+          {\usebeamerfont{institute}\usebeamercolor[fg]{institute}\insertinstitute\par}%
+        \fi
+        \vspace{.8ex}%
+        {\usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate\par}%
+      };
+    % logos, abajo a la derecha (se definen con \titlegraphic{...})
+    \ifx\inserttitlegraphic\@empty\else
+      \node[anchor=south east, inner sep=0pt]
+        at ($(current page.south east)+(-.08\paperwidth,.06\paperheight)$)
+        {\inserttitlegraphic\unskip};
+    \fi
+  \end{tikzpicture}%
+}
+\makeatother
+
+%=======================================================================
+% AJUSTES TIPOGRÁFICOS DEL TEMA
+%=======================================================================
+\setbeamerfont{title}{size=\LARGE, series=\bfseries}
+\setbeamerfont{subtitle}{size=\large, series=\mdseries}
+\setbeamerfont{frametitle}{size=\large, series=\bfseries}
+\setbeamerfont{author}{size=\normalsize, series=\bfseries}
+\setbeamerfont{institute}{size=\small}
+\setbeamerfont{date}{size=\small}
+
+% Barra de progreso un poco más gruesa que la default de metropolis
+\makeatletter
+\setlength{\metropolis@titleseparator@linewidth}{1.6pt}
+\setlength{\metropolis@progressonsectionpage@linewidth}{1.6pt}
+\setlength{\metropolis@progressinheadfoot@linewidth}{1.6pt}
+\makeatother
+
+\mode<all>

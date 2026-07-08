@@ -1,0 +1,148 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  zd-paquetes.sty
+%%
+%%  Preámbulo de paquetes para presentaciones beamer (tema pablozd).
+%%  Ordenado por bloques funcionales. Cargar DESPUÉS de \usetheme.
+%%
+%%  Uso:  \usepackage{zd-paquetes}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{zd-paquetes}[2026/07/06 v1.0 Paquetes para beamer pablozd]
+
+%=======================================================================
+% 1. ESTRUCTURA DEL DOCUMENTO BEAMER
+%=======================================================================
+\usepackage{appendixnumberbeamer} % \appendix reinicia la numeración de
+                                  % frames: el apéndice no cuenta en n/total
+\usepackage{bookmark}             % bookmarks del PDF más robustos
+                                  % (beamer ya carga hyperref por debajo)
+
+%=======================================================================
+% 2. TIPOGRAFÍA Y MATEMÁTICA
+%=======================================================================
+% La tipografía la define el tema base `metropolis` del template.
+% No forzamos la familia de texto aquí para conservar la fuente original del tema.
+\usepackage{amsmath,mathtools,amssymb} % símbolos matemáticos y lógicos
+\usepackage{stmaryrd}             % \llbracket ... \rrbracket para
+                                  % funciones de interpretación/asignación
+\usepackage{unicode-math}         % matemática OpenType en LuaLaTeX/XeLaTeX
+\setmathfont{Fira Math}           % matemática sans, coherente con metropolis
+\setmathrm{Fira Sans}             % \mathrm en sans, no roman/serif
+
+%=======================================================================
+% 3. TEXTO: UTILIDADES
+%=======================================================================
+\usepackage{xspace}               % espaciado inteligente tras macros de texto
+\usepackage[normalem]{ulem}       % \sout{...} para material elidido
+                                  % (normalem preserva \emph itálico)
+\usepackage{soul}                 % \hl, \so: resaltado y espaciado de letras
+\usepackage{multicol}             % múltiples columnas dentro de un frame
+
+% Nombre del tema, para citarlo en el texto
+\newcommand{\themename}{\textbf{\textsc{pablozd}}\xspace}
+
+%=======================================================================
+% 4. TABLAS
+%=======================================================================
+\usepackage{booktabs}             % \toprule, \midrule, \bottomrule
+
+%=======================================================================
+% 5. GRÁFICOS: TIKZ Y PGFPLOTS
+%=======================================================================
+\usepackage{tikz}
+\usepackage{tikz-cd}              % diagramas conmutativos
+\usetikzlibrary{fit,shapes,backgrounds,decorations,%
+  decorations.pathmorphing,decorations.pathreplacing,calligraphy}
+\usetikzlibrary{arrows,automata,positioning}
+\usetikzlibrary{mindmap,spy,trees,shadows,calendar}
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{tikzmark}         % \tikzmark: anclas para flechas overlay
+
+\usepackage{pgfplots}             % gráficos de datos
+\pgfplotsset{compat=1.18}         % fija la sintaxis moderna de pgfplots
+\usepgfplotslibrary{dateplot}     % ejes con fechas
+
+%=======================================================================
+% 6. ÁRBOLES SINTÁCTICOS
+%=======================================================================
+% Orden importante: tikz-qtree redefine \Tree de qtree con motor TikZ.
+\usepackage{qtree}                % sintaxis clásica \Tree [.X ... ]
+\usepackage{tikz-qtree}           % misma sintaxis, render con TikZ
+\usepackage[linguistics]{forest}  % forest con preset lingüístico
+                                  % (nice empty nodes, etc.)
+
+% Estilo de árbol compacto y acorde al tema, pensado para beamer:
+% niveles más juntos, tipografía sans y aristas en gris azulado.
+%     \begin{forest} arbolzd [S [SD [Juan]] ... ] \end{forest}
+\providecolor{zdInk}{HTML}{15263B}
+\providecolor{zdGray}{HTML}{5A6B7D}
+\forestset{%
+  arbolzd/.style={%
+    for tree={%
+      font=\sffamily\small,
+      text=zdInk,
+      edge={zdGray, line width=.6pt},
+      s sep=2.4em,      % separación horizontal entre hermanos
+      l sep=.9em,       % separación vertical entre niveles
+      l=0pt,            % sin altura mínima extra por nivel
+      inner ysep=1.5pt,
+    }%
+  }%
+}
+
+%=======================================================================
+% 7. LINGÜÍSTICA: EJEMPLOS, GLOSAS, AVMs
+%=======================================================================
+% langsci-gb4e: gb4e adaptado por Language Science Press.
+% Ya integra cgloss y jambox, por lo que NO hay que cargar
+% \usepackage{jambox} por separado (produciría definiciones duplicadas).
+\usepackage{langsci-gb4e}         % numeración automática de ejemplos
+% \usepackage{jambox}             % <- innecesario: incluido en langsci-gb4e
+
+\usepackage{avm}                  % matrices de atributo-valor (Manning)
+                                  % ojo: no está en CTAN, requiere avm.sty local
+
+\usepackage{leipzig}              % convenciones de glosas de Leipzig
+\newleipzig{Cl}{cl}{cli\-tic}                     % \Cl{} -> CL
+\newleipzig{Dom}{dom}{Differential Object Marking}% \Dom{} -> DOM
+
+% Subíndices de indexación referencial: perro\idx{i}
+\newcommand{\idx}[1]{\textsubscript{\textit{#1}}}
+
+% Separación entre glosa y traducción (\glt / \trans)
+\newlength{\glosstranslationsep}
+\setlength{\glosstranslationsep}{0pt}
+\renewcommand{\glt}{\vskip\glosstranslationsep}
+\let\trans\glt
+
+% Las tres líneas de la glosa en sans, coherentes con el tema
+\renewcommand{\eachwordone}{\sffamily}
+\renewcommand{\eachwordtwo}{\sffamily}
+\renewcommand{\eachwordthree}{\sffamily}
+
+%=======================================================================
+% 8. BIBLIOGRAFÍA
+%=======================================================================
+\usepackage[natbib=true,%          habilita \citet, \citep, etc.
+  citestyle=authoryear,bibstyle=authoryear,style=authoryear,%
+  backend=biber]{biblatex}
+\addbibresource{./references.bib}
+
+%=======================================================================
+% 9. HYPERREF (SIEMPRE AL FINAL)
+%=======================================================================
+% beamer ya carga hyperref: las opciones van con \hypersetup,
+% no con \usepackage[...]{hyperref} (evita "option clash").
+% Los colores dark-red / dark-blue / medium-blue los define el tema;
+% acá se proveen por si el preámbulo se usa con otro tema.
+\providecolor{dark-red}{HTML}{8B1A1A}
+\providecolor{dark-blue}{HTML}{02386E}
+\providecolor{medium-blue}{HTML}{015CB4}
+\hypersetup{%
+  colorlinks=true,
+  linkcolor=dark-red,
+  citecolor=dark-blue,
+  urlcolor=medium-blue,
+  breaklinks=true,
+  pageanchor=true,
+}
